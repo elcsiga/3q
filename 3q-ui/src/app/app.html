@@ -1,0 +1,53 @@
+<div class="flex items-center justify-center h-screen w-screen  bg-blue-900">
+  <div class="max-w-[60vw]  max-h-[60vh] aspect-square">
+
+    @switch (status()) {
+
+    @case ('noMic') {
+    <button (click)="enableMic()">
+      <img class="animate-[arrowBounce]" src="microphone.svg">
+    </button>
+    }
+
+    @case ('askForMic') {
+    <img src="arrow.svg">
+    }
+
+    @case ('ready') {
+    <button (click)="start()">
+      <img src="play.svg">
+    </button>
+    }
+
+    @case ('playing') {
+    <button (click)="stop()">
+      <img src="stop.svg">
+    </button>
+    }
+
+    @case ('error') {
+    <img src="error.svg">
+    }
+
+    @default {
+    <img class="w-[100%]"
+         src="spinner.svg" />
+    }
+    }
+  </div>
+  <audio #test
+         src="test.mp3"
+         preload="auto"></audio>
+  <audio #intro
+         src="intro.mp3"
+         preload="auto"></audio>
+  <audio #outro
+         src="outro.mp3"
+         preload="auto"></audio>
+  <audio #correct
+         src="correct.mp3"
+         preload="auto"></audio>
+  <audio #incorrect
+         src="incorrect.mp3"
+         preload="auto"></audio>
+</div>

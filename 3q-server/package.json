@@ -1,0 +1,24 @@
+{
+  "name": "3q-server",
+  "version": "1.0.0",
+  "description": "Three Question Game with AI",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "ui": "cd ../3q-ui && npm ci && npm run build",
+    "start": "node --env-file=.env index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "game",
+    "ai"
+  ],
+  "author": "elcsiga",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+  }
+}
