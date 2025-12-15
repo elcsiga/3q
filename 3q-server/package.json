@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "ui": "cd ../3q-ui && npm ci && npm run build",
-    "start": "node --env-file=.env index.js",
+    "dev": "npm run ui && node --env-file=.env index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
