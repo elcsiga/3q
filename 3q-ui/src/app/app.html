@@ -5,12 +5,12 @@
 
     @case ('noMic') {
     <button (click)="enableMic()">
-      <img class="animate-[arrowBounce]" src="microphone.svg">
+      <img src="microphone.svg">
     </button>
     }
 
     @case ('askForMic') {
-    <img src="arrow.svg">
+      <img class="animate-bounce" src="microphone.svg">
     }
 
     @case ('ready') {

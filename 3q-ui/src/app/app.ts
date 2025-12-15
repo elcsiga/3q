@@ -20,6 +20,8 @@ export class App implements AfterViewInit {
   private readonly activatedRoute = inject(ActivatedRoute);
 
   ngAfterViewInit(): void {
+    this.keepAlive();
+
     this.testSound.nativeElement.volume = 0.5;
     this.introSound.nativeElement.volume = 0.5;
     this.outroSound.nativeElement.volume = 0.3;
@@ -53,6 +55,15 @@ export class App implements AfterViewInit {
       .finally(() => {
         this.checkPermissions()
       });
+  }
+
+  async keepAlive() {
+    try {
+      await navigator.wakeLock.request('screen');
+      console.log('Wake Lock is active!');
+    } catch (err: any) {
+      console.log(`Wake Lock is not active: ${err.name}, ${err.message}`);
+    }
   }
 
   start() {

@@ -71,6 +71,17 @@ export async function initConversation(name: string, topic: string, callbacks: C
 
   const s = new RealtimeSession(agent, {});
   await s.connect({ apiKey: token });
+
+  // session.update({
+  //   session: {
+  //     turn_detection: {
+  //       type: "semantic_vad",
+  //       eagerness: "low", // Makes the agent wait longer before assuming the user is done
+  //       interrupt_response: false, // Ensures the agent finishes its current turn before processing the new input
+  //     }
+  //   }
+  // });
+
   s.sendMessage('Kezdjük!');
 
   session.set(s);
