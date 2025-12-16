@@ -1,6 +1,10 @@
 import { signal } from "@angular/core";
 import { FunctionTool } from "@openai/agents";
-import { RealtimeAgent, RealtimeSession } from "@openai/agents/realtime";
+import { RealtimeAgent, RealtimeSession, RealtimeSessionConfig } from "@openai/agents/realtime";
+
+export function timeout(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 export const quizTopics = [
   'Hungarian kings',
@@ -49,7 +53,7 @@ export interface Callbacks {
 
 export const session = signal<RealtimeSession | null>(null);
 
-export async function initConversation(name: string, topic: string, callbacks: Callbacks) {
+export async function initSession(name: string, topic: string, callbacks: Callbacks) {
   const response = await fetch('/api/token');
   if (!response.ok) {
     throw new Error('Failed to fetch token.');
@@ -69,25 +73,20 @@ export async function initConversation(name: string, topic: string, callbacks: C
     ]
   });
 
-  const s = new RealtimeSession(agent, {});
-  await s.connect({ apiKey: token });
+  session.set(new RealtimeSession(agent));
 
-  // session.update({
-  //   session: {
-  //     turn_detection: {
-  //       type: "semantic_vad",
-  //       eagerness: "low", // Makes the agent wait longer before assuming the user is done
-  //       interrupt_response: false, // Ensures the agent finishes its current turn before processing the new input
-  //     }
-  //   }
-  // });
-
-  s.sendMessage('Kezdjük!');
-
-  session.set(s);
+  session()!.connect({ apiKey: token });
 }
 
-export function stopConversation() {
+export function startConversation() {
+  session()?.sendMessage('Kezdjük!');
+}
+
+export function mute(muted: boolean) {
+  session()?.mute(muted);
+}
+
+export function closeSession() {
   session()?.close();
   session.set(null);
 }

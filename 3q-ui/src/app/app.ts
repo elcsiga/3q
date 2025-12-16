@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
-import { getRandomTopic, initConversation, stopConversation } from './ai';
+import { getRandomTopic, initSession, startConversation, closeSession, mute } from './ai';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -57,7 +57,7 @@ export class App implements AfterViewInit {
       });
   }
 
-  async keepAlive() {
+  private async keepAlive() {
     try {
       await navigator.wakeLock.request('screen');
       console.log('Wake Lock is active!');
@@ -66,8 +66,12 @@ export class App implements AfterViewInit {
     }
   }
 
-  start() {
+  private mute() {
+    mute(true);
+    console.log(`Muted.`);
+  }
 
+  start() {
     const name = this.activatedRoute.snapshot.queryParamMap.get('name') || 'Karesz';
     const topic = this.activatedRoute.snapshot.queryParamMap.get('topic') || getRandomTopic();
 
@@ -75,45 +79,50 @@ export class App implements AfterViewInit {
     console.log(`Topic: ${topic}`);
     console.log(`Starting quiz.`);
 
-    this.introSound.nativeElement.play();
-    this.status.set('starting')
-
-    setTimeout(() => initConversation(name, topic, {
+    initSession(name, topic, {
       correctAnswer: () => {
         console.log('Correct answer.');
-        this.correctSound.nativeElement.play()
+        this.correctSound.nativeElement.play();
       },
       incorrectAnswer: () => {
         console.log('Incorrect answer.');
-        this.incorrectSound.nativeElement.play()
+        this.incorrectSound.nativeElement.play();
       },
       endConversation: () => {
         console.log('End of quiz.');
+        this.mute();
+
         setTimeout(() => {
           this.outroSound.nativeElement.play();
           this.status.set('stopping');
         }, 2000);
 
         setTimeout(() => {
-          stopConversation();
+          closeSession();
           this.status.set('ready');
         }, 16000);
       }
     })
       .then(() => {
-        this.status.set('playing');
-        this.introSound.nativeElement.volume = 0.2;
+        this.introSound.nativeElement.play();
+        this.status.set('starting')
+
+        setTimeout(() => {
+          this.status.set('playing');
+          this.introSound.nativeElement.volume = 0.2;
+
+          startConversation();
+        }, 5000);
       })
       .catch((e: any) => {
         console.error(e);
         this.status.set('error');
       })
-      , 3000);
   }
 
   stop() {
     this.status.set('stopping');
-    stopConversation();
+    closeSession();
     setTimeout(() => this.status.set('ready'), 1000);
   }
 }

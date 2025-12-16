@@ -4,25 +4,34 @@
     @switch (status()) {
 
     @case ('noMic') {
-    <button (click)="enableMic()">
+    <button class="hover:opacity-70 cursor-pointer"
+            (click)="enableMic()">
       <img src="microphone.svg">
     </button>
     }
 
     @case ('askForMic') {
-      <img class="animate-bounce" src="microphone.svg">
+    <img class="animate-bounce"
+         src="microphone.svg">
     }
 
     @case ('ready') {
-    <button (click)="start()">
+    <button class="hover:opacity-70 cursor-pointer"
+            (click)="start()">
       <img src="play.svg">
     </button>
     }
 
     @case ('playing') {
-    <button (click)="stop()">
+    <button class="hover:opacity-70 cursor-pointer"
+            (click)="stop()">
       <img src="stop.svg">
     </button>
+    }
+
+    @case ('starting') {
+    <img class="w-full"
+         src="starting.svg">
     }
 
     @case ('error') {
@@ -30,7 +39,7 @@
     }
 
     @default {
-    <img class="w-[100%]"
+    <img class="w-full"
          src="spinner.svg" />
     }
     }
