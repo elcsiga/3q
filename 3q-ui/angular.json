@@ -17,7 +17,7 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
-            "outputPath": "../3q-server/ui",
+            "outputPath": "dist",
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
